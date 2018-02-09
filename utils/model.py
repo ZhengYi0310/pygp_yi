@@ -12,20 +12,21 @@ import numpy as np
 import copy
 
 # ABC imports.
-from mwhutils.abc import ABCMeta, abstractmethod
+#from mwhutils.abc import ABCMeta, abstractmethod
+import six
+import abc
 
 # exported symbols
 __all__ = ['Parameterized', 'printable', 'get_params']
 
-
+@six.add_metaclass(abc.ABCMeta)
 class Parameterized(object):
     """
     Interface for objects that are parameterized by some set of
     hyperparameters.
     """
-    __metaclass__ = ABCMeta
 
-    @abstractmethod
+    @abc.abstractmethod
     def _params(self):
         """
         Define the set of parameters for the model. This should return a list
@@ -34,12 +35,12 @@ class Parameterized(object):
         """
         raise NotImplementedError
 
-    @abstractmethod
+    @abc.abstractmethod
     def get_hyper(self):
         """Return a vector of model hyperparameters."""
         raise NotImplementedError
 
-    @abstractmethod
+    @abc.abstractmethod
     def set_hyper(self, hyper):
         """Set the model hyperparameters to the given vector."""
         raise NotImplementedError

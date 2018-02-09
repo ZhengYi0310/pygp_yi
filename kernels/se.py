@@ -105,3 +105,4 @@ class SE(RealKernel):
             W = rng.randn(N, self.ndim) / ell
             return W, sf2
         '''
+        pass # for now
