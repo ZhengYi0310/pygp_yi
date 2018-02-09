@@ -28,7 +28,7 @@ class ExactGP(GP):
 
     @classmethod
     def from_gp(cls, gp):
-        newgp = cls(gp._likelihood.copy(), gp._kernel.copy(), gp._mean)
+        newgp = cls(gp.likelihood_.copy(), gp.kernel_.copy(), gp.mean_)
         if gp.ndata > 0:
             X, y = gp.data
             newgp.add_data(X, y)
@@ -81,4 +81,37 @@ class ExactGP(GP):
             k = self.kernel_.get(self.X_, X)
             v = sla.solve_triangular(self.L_, k, lower=True)
 
-            mu += np.dot()
+            mu += np.dot(v.T, self.alpha_)
+            sigma -= np.dot(v.T, v)
+        return mu, sigma
+
+    def _marg_posterior(self, X, grad=False):
+        mu = np.full(X.shape[0], self._mean)
+        s2 = self.kernel_.dget(X)
+        k = self.kernel_.get(self.X_, X)
+        v = sla.solve_triangular(self.L_, k, lower=True)
+
+        mu += np.dot(v.T, self.alpha_)
+        s2 -= np.sum(v**2, axis=0)
+
+        if not grad:
+            return (mu, s2)
+
+    def loglikelihood(self, grad=False):
+        lZ = -0.5 * np.dot(self.alpha_.T, self.alpha_)
+        lZ -= np.log(np.sum(self.L_.diagonal()))
+        lZ -= 0.5 * self.ndata * np.log(2 * np.pi)
+
+        if not grad:
+            return lZ
+
+        alpha = sla.solve_triangular(self.L_.T, self.alpha_, lower=True)
+        Q = -np.dot(alpha, alpha.T)
+        Q += sla.cho_solve((self.L_, True), np.eye(self.ndata))
+
+        #eq5.9, A.14, A.15 in Gaussian Process for Machine Learning
+        dlZ = np.r_[-self._likelihood.s2 * np.trace(Q), #derivative wrt the likelihood's noise term.
+                    [-0.5 * np.trace(Q * dk) for dk in self.kernel_.grad(self.X_)], #derivative wrt the kernel hyper,
+                    np.sum(alpha)]
+
+        return lZ, dlZ
