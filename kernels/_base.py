@@ -11,7 +11,7 @@ from __future__ import print_function
 from abc import abstractmethod
 
 # local imports
-from ..utils.models import Parameterized
+from ..utils.model import Parameterized
 
 # exported symbols
 __all__ = ['Kernel']

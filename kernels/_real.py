@@ -22,6 +22,9 @@ from ._combo import ProductKernel as ProductKernel_
 from ._combo import combine
 from ._combo import product_but
 
+# exported symbols
+__all__ = ['RealKernel']
+
 class RealKernel(Kernel):
     """Kernel whose inputs are real-valued vectors."""
 

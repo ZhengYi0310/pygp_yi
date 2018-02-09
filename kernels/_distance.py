@@ -30,6 +30,14 @@ def diff(X1, X2=None):
     X2 = X1 if (X2 is None) else X2
     return X1[:, None, :] - X2[None, :, :]
 
+def sqdist(X1, X2=None):
+    """
+    Return the squared-distance between two sets of vector. If `X2` is not
+    given this will return the pairwise squared-distances in `X1`.
+    """
+    X2 = X1 if (X2 is None) else X2
+    return ssd.cdist(X1, X2, 'sqeuclidean')
+
 def sqdist_foreach(X1, X2=None):
     """
     Return an iterator over each dimension returning the squared-distance
