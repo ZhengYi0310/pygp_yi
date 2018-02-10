@@ -84,6 +84,10 @@ class SE(RealKernel):
         D = diff(X1, X2)
         K = np.exp(self.logsf_ * 2 - np.sum(D**2, axis=-1) * 0.5)
         G = -K[:, :, None] * D / els
+        return G
+
+    def grady(self, X1, X2=None):
+        return -self.gradx(X1, X2)
 
     def gradxy(self, X1, X2=None):
         els = np.exp(self.logels_)
@@ -96,6 +100,7 @@ class SE(RealKernel):
         D = D / els
         M = np.eye(D) / (els ** 2) - D[:, :, :, None] * D[:, :, None, :]
         G = K[:, :, None, None] * M
+        return G
 
     def sample_spectrum(self, N, rng=None):
         '''

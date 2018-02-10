@@ -88,14 +88,36 @@ class ExactGP(GP):
     def _marg_posterior(self, X, grad=False):
         mu = np.full(X.shape[0], self._mean)
         s2 = self.kernel_.dget(X)
-        k = self.kernel_.get(self.X_, X)
-        v = sla.solve_triangular(self.L_, k, lower=True)
 
-        mu += np.dot(v.T, self.alpha_)
-        s2 -= np.sum(v**2, axis=0)
+        if self.X_ is not None:
+            k = self.kernel_.get(self.X_, X)
+            v = sla.solve_triangular(self.L_, k, lower=True)
+
+            mu += np.dot(v.T, self.alpha_)
+            s2 -= np.sum(v**2, axis=0)
 
         if not grad:
             return (mu, s2)
+
+        # prior gradients
+        # NOTE: the above assumes a constant mean and stationary kernel (which
+        # we satisfy, but should we change either assumption...).
+
+        dmu = np.zeros_like(X)
+        ds2 = np.zeros_like(X)
+
+        if self.X_ is not None:
+            dK = self.kernel_.grady(self.X_, X) # M x N x D
+            dK = dK.reshape(self.ndata, -1) # M x ND
+            Rdk = sla.solve_triangular(self.L_, self.dK, lower=True)
+            dmu += np.dot(Rdk.T, self.alpha_).reshape(X.shape)
+
+            Rdk = np.rollaxis(np.reshape(Rdk, (-1, ) + X.shape), 2) # D x M x N
+            ds2 -= 2 * np.sum(Rdk * v, axis=1).T # N x D
+        return (mu, s2, dmu, ds2)
+
+
+
 
     def loglikelihood(self, grad=False):
         lZ = -0.5 * np.dot(self.alpha_.T, self.alpha_)
@@ -109,9 +131,10 @@ class ExactGP(GP):
         Q = -np.dot(alpha, alpha.T)
         Q += sla.cho_solve((self.L_, True), np.eye(self.ndata))
 
-        #eq5.9, A.14, A.15 in Gaussian Process for Machine Learning
-        dlZ = np.r_[-self._likelihood.s2 * np.trace(Q), #derivative wrt the likelihood's noise term.
-                    [-0.5 * np.trace(Q * dk) for dk in self.kernel_.grad(self.X_)], #derivative wrt the kernel hyper,
+        dlZ = np.r_[-self.likelihood_.s2 * np.trace(Q), #derivative wrt the likelihood's noise term.
+                    [-0.5 * np.sum(Q * dk) for dk in self.kernel_.grad(self.X_)], #derivative wrt the kernel hyper,
+                    # eq5.9, A.14, A.15 in Gaussian Process for Machine Learning, Q is symmetric, therefore can be replaced
+                    # by elementwise product
                     np.sum(alpha)]
 
         return lZ, dlZ

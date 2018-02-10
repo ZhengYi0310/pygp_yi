@@ -92,14 +92,14 @@ class GP(Parameterized):
 
     def set_hyper(self, hyper):
         # FIXME: should set_hyper check the number of hyperparameters?
-        a = self._likelihood.nhyper
-        b = self._kernel.nhyper
+        a = self.likelihood_.nhyper
+        b = self.kernel_.nhyper
         assert (len(hyper) == a + b + 1), "the number of hyper parameters don't match the model, " \
                                           "should be {} + {} + 1, yet {} provided".format(a ,b ,len(hyper))
 
-        self._likelihood.set_hyper(hyper[:a])
-        self._kernel.set_hyper(hyper[a:a + b])
-        self._mean = hyper[-1]
+        self.likelihood_.set_hyper(hyper[:a])
+        self.kernel_.set_hyper(hyper[a:a + b])
+        self.mean_ = hyper[-1]
 
         if self.ndata > 0:
             self._update()
