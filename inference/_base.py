@@ -65,9 +65,9 @@ class GP(Parameterized):
 
         return indent(self.__class__.__name__ + '(',
             ',\n'.join([
-                indent('likelihood=', repr(self._likelihood)),
-                indent('kernel=', repr(self._kernel)),
-                indent('mean=', str(self._mean))]) + ')')
+                indent('likelihood=', repr(self.likelihood_)),
+                indent('kernel=', repr(self.kernel_)),
+                indent('mean=', str(self.mean_))]) + ')')
 
     def _params(self):
         params = []
@@ -87,7 +87,7 @@ class GP(Parameterized):
 
     def get_hyper(self):
         return np.r_[self.likelihood_.get_hyper(),
-                     self.kernel.get_hyper(),
+                     self.kernel_.get_hyper(),
                      self.mean_]
 
     def set_hyper(self, hyper):
@@ -107,29 +107,34 @@ class GP(Parameterized):
     @property
     def ndata(self):
         """The number of current input/output data pairs."""
-        return 0 if (self._X is None) else self._X.shape[0]
+        return 0 if (self.X_ is None) else self.X_.shape[0]
+
+    @property
+    def data(self):
+        """The current input/output data."""
+        return (self.X_, self.Y_)
 
     def add_data(self, X, y):
         """
         Add new data to the GP model.
         """
-        X = self._kernel.transform(X)
-        y = self._likelihood.transform(y)
+        X = self.kernel_.transform(X)
+        y = self.likelihood_.transform(y)
 
         if self._X is None:
-            self._X = X.copy()
-            self._y = y.copy()
+            self.X_ = X.copy()
+            self.Y_ = y.copy()
             self._update()
 
         else:
             try:
                 self._updateinc(X, y)
-                self._X = np.r_[self._X, X]
-                self._y = np.r_[self._y, y]
+                self.X_ = np.r_[self.X_, X]
+                self.Y_ = np.r_[self.Y_, y]
 
             except NotImplementedError:
-                self._X = np.r_[self._X, X]
-                self._y = np.r_[self._y, y]
+                self.X_ = np.r_[self.X_, X]
+                self.Y_ = np.r_[self.Y_, y]
                 self._update()
 
     def sample(self, X, m=None, latent=True, rng=None):
@@ -142,7 +147,7 @@ class GP(Parameterized):
         will instead be returned corrupted by the observation noise. Finally
         `rng` can be used to seed the randomness.
         """
-        X = self._kernel.transform(X)
+        X = self.kernel_.transform(X)
 
         # this boolean indicates whether we'll flatten the sample to return a
         # vector, or if we'll return a set of samples as an array.
@@ -174,7 +179,7 @@ class GP(Parameterized):
         derivatives with respect to the input location as well (i.e. a
         4-tuple).
         """
-        return self._marg_posterior(self._kernel.transform(X), grad)
+        return self._marg_posterior(self.kernel_.transform(X), grad)
 
     def sample_fourier(self, N, rng=None):
         """

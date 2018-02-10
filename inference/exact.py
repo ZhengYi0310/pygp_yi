@@ -5,7 +5,7 @@ from __future__ import print_function
 import numpy as np
 import scipy.linalg as sla
 from ._base import GP
-from ..likelihood import gaussian
+from ..likelihood import Gaussian
 
 __all__ = ['ExactGP']
 
@@ -19,7 +19,7 @@ class ExactGP(GP):
     """
     def __init__(self, likelihood, kernel, mean):
         # NOTE: exact inference will only work with Gaussian likelihoods.
-        if not isinstance(likelihood, gaussian):
+        if not isinstance(likelihood, Gaussian):
             raise ValueError('exact inference requires a Gaussian likelihood')
 
         super(ExactGP, self).__init__(likelihood, kernel, mean)
@@ -58,13 +58,13 @@ class ExactGP(GP):
         n = A.shape[0]
         m = C.shape[0]
 
-        B = sla.solve_triangular(A, B, trans=True)
-        C = sla.cholesky(C - np.dot(B.T, B))
+        B = sla.solve_triangular(A, B, lower=True)
+        C = sla.cholesky(C - np.dot(B.T, B), lower=True)
         c = np.dot(B.T, a)
 
         # grow the new cholesky and use then use this to grow the vector a.
-        A = np.r_[np.c_[A, B], np.c_[np.zeros((m, n)), C]]
-        a = np.r_[a, sla.solve_triangular(C, b - c, trans=True)]
+        A = np.r_[np.c_[A, np.zeros((m, n))], np.c_[B.T, C]]
+        a = np.r_[a, sla.solve_triangular(C, b - c, lower=True)]
 
         return A, a
     def _updateinc(self, X, y):
@@ -72,6 +72,7 @@ class ExactGP(GP):
         Kss = self._kernel.get(X) + sn2 * np.eye(len(X))
         Kxs = self._kernel.get(self._X, X)
         r = y - self._mean
+        self._R, self._a = self._chol_update(self._R, Kxs, Kss, self._a, r)
 
     def _full_posterior(self, X):
         mu = np.full(X.shape[0], self.mean_)
