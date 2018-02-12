@@ -5,10 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="103b0162-1b23-44c8-a038-922ddce9cb75" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference/_base.py" afterPath="$PROJECT_DIR$/inference/_base.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference/dtc.py" afterPath="$PROJECT_DIR$/inference/dtc.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/inference/exact.py" afterPath="$PROJECT_DIR$/inference/exact.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kernels/__init__.py" afterPath="$PROJECT_DIR$/kernels/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/likelihood/__init__.py" afterPath="$PROJECT_DIR$/likelihood/__init__.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -30,10 +28,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="se.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="se.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/kernels/se.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-27">
+            <state relative-caret-position="443">
               <caret line="79" column="15" lean-forward="false" selection-start-line="79" selection-start-column="15" selection-end-line="79" selection-end-column="15" />
               <folding>
                 <element signature="e#84#115#0" expanded="true" />
@@ -45,7 +43,7 @@
       <file leaf-file-name="_base.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/inference/_base.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2899">
+            <state relative-caret-position="334">
               <caret line="196" column="11" lean-forward="true" selection-start-line="192" selection-start-column="4" selection-end-line="196" selection-end-column="11" />
               <folding>
                 <element signature="e#251#282#0" expanded="true" />
@@ -54,23 +52,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="basic.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/inference/basic.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="747">
-              <caret line="55" column="38" lean-forward="false" selection-start-line="55" selection-start-column="38" selection-end-line="55" selection-end-column="38" />
-              <folding>
-                <element signature="e#46#77#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="dtc.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="dtc.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/inference/dtc.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="557">
-              <caret line="100" column="40" lean-forward="false" selection-start-line="100" selection-start-column="40" selection-end-line="100" selection-end-column="40" />
+            <state relative-caret-position="532">
+              <caret line="115" column="17" lean-forward="false" selection-start-line="115" selection-start-column="17" selection-end-line="115" selection-end-column="17" />
               <folding>
                 <element signature="e#67#98#0" expanded="true" />
               </folding>
@@ -81,8 +67,8 @@
       <file leaf-file-name="exact.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/inference/exact.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="122" column="40" lean-forward="true" selection-start-line="122" selection-start-column="4" selection-end-line="122" selection-end-column="40" />
+            <state relative-caret-position="510">
+              <caret line="116" column="56" lean-forward="true" selection-start-line="115" selection-start-column="12" selection-end-line="116" selection-end-column="56" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -122,17 +108,17 @@
         <option value="$PROJECT_DIR$/kernels/__init__.py" />
         <option value="$PROJECT_DIR$/likelihood/__init__.py" />
         <option value="$PROJECT_DIR$/inference/DTC.py" />
-        <option value="$PROJECT_DIR$/inference/exact.py" />
         <option value="$PROJECT_DIR$/inference/_base.py" />
         <option value="$PROJECT_DIR$/inference/basic.py" />
+        <option value="$PROJECT_DIR$/inference/exact.py" />
         <option value="$PROJECT_DIR$/inference/dtc.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-54" />
+    <option name="x" value="-52" />
     <option name="y" value="24" />
-    <option name="width" value="1043" />
+    <option name="width" value="1165" />
     <option name="height" value="1056" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -342,10 +328,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-54" y="24" width="1043" height="1056" extended-state="4" />
+    <frame x="-52" y="24" width="1165" height="1056" extended-state="4" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1792905" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16051503" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18390805" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -481,6 +467,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/kernels/se.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="443">
+          <caret line="79" column="15" lean-forward="false" selection-start-line="79" selection-start-column="15" selection-end-line="79" selection-end-column="15" />
+          <folding>
+            <element signature="e#84#115#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/inference/basic.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="747">
@@ -491,10 +487,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/inference/_base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="334">
+          <caret line="196" column="11" lean-forward="true" selection-start-line="192" selection-start-column="4" selection-end-line="196" selection-end-column="11" />
+          <folding>
+            <element signature="e#251#282#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/inference/exact.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="122" column="40" lean-forward="true" selection-start-line="122" selection-start-column="4" selection-end-line="122" selection-end-column="40" />
+        <state relative-caret-position="510">
+          <caret line="116" column="56" lean-forward="true" selection-start-line="115" selection-start-column="12" selection-end-line="116" selection-end-column="56" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>
@@ -503,30 +509,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/inference/dtc.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="557">
-          <caret line="100" column="40" lean-forward="false" selection-start-line="100" selection-start-column="40" selection-end-line="100" selection-end-column="40" />
+        <state relative-caret-position="532">
+          <caret line="115" column="17" lean-forward="false" selection-start-line="115" selection-start-column="17" selection-end-line="115" selection-end-column="17" />
           <folding>
             <element signature="e#67#98#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/inference/_base.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2899">
-          <caret line="196" column="11" lean-forward="true" selection-start-line="192" selection-start-column="4" selection-end-line="196" selection-end-column="11" />
-          <folding>
-            <element signature="e#251#282#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/kernels/se.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-27">
-          <caret line="79" column="15" lean-forward="false" selection-start-line="79" selection-start-column="15" selection-end-line="79" selection-end-column="15" />
-          <folding>
-            <element signature="e#84#115#0" expanded="true" />
           </folding>
         </state>
       </provider>

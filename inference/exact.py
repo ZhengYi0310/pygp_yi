@@ -110,7 +110,7 @@ class ExactGP(GP):
         if self.X_ is not None:
             dK = self.kernel_.grady(self.X_, X) # M x N x D
             dK = dK.reshape(self.ndata, -1) # M x ND
-            Rdk = sla.solve_triangular(self.L_, self.dK, lower=True)
+            Rdk = sla.solve_triangular(self.L_, dK, lower=True)
             dmu += np.dot(Rdk.T, self.alpha_).reshape(X.shape)
 
             Rdk = np.rollaxis(np.reshape(Rdk, (-1, ) + X.shape), 2) # D x M x N
