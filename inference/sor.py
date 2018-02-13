@@ -61,7 +61,7 @@ class SoR(GP):
         Kuu = self.kernel_.get(self.U_)
         self.luu_ = sla.cholesky(Kuu + su2 * np.eye(p_dim), lower=True)
 
-        Kux = self.kernel_.get(self.X_ + self.U_)
+        Kux = self.kernel_.get(self.U_, self.X_)
         Sigma = Kuu + np.dot(Kux , Kux.T) / self.likelihood_.s2
         r = self.Y_ - self.mean_
         self.lux_ = sla.cholesky(Sigma + su2 * np.eye(p_dim), lower=True)
@@ -131,7 +131,7 @@ class SoR(GP):
 
         V = sla.solve_triangular(self.lux_, Kux, lower=True)
         V /= sn
-        P = self.U_.shape[0]
+        P = self.ndata
         A = np.eye(P) - np.dot(V.T, V)
         lZ = -0.5 * np.dot(np.dot(r.T, A), r)
 
@@ -156,7 +156,7 @@ class SoR(GP):
         Kuu_inv = sla.cho_solve((self.luu_, True), np.eye(P))
 
         # gradient w.r.t the noise variance
-        dl1dsn2 = (-self.ndata / sn2 + np.trace(np.dot(V.T, V)) / sn2) * 0.5
+        dl1dsn2 = (-self.ndata + np.trace(np.dot(V.T, V))) * 0.5
         dl2dsn2 = 0.5 *  np.dot(np.dot(r.T, A.T), np.dot(A, r))
         dlZ[0] = dl1dsn2 + dl2dsn2
 
@@ -166,7 +166,7 @@ class SoR(GP):
             Sigma_dot = dKuu + (temp0 + temp0.T) / sn2
             dlZ1 = -0.5 * np.sum(Sigma_inv * Sigma_dot) + 0.5 * np.sum(Kuu_inv * dKuu)
 
-            temp1 = sla.solve_triangular(self.lux_, Sigma_dot)
+            temp1 = sla.solve_triangular(self.lux_, Sigma_dot, lower=True)
             dlZ2 = np.dot(self.lux_.T, B)
             temp2 = np.dot(temp1, B) * 0.5 - dlZ2
             dlZ2 = -1 * np.dot(dlZ2.T, temp2)
