@@ -75,14 +75,14 @@ class SoR(GP):
         """
 
         B = sla.cho_solve((self.lux_, True), np.dot(self.Kux, self.r))
-        dKxU_dx = np.sum(self.kernel_.gradx(x, self.U_), axis=-1)
+        dKxU_dx = np.sum(self.kernel_.gradx(x, self.U_), axis=1)
         # TODO check if there is a tensor broadcasting
         prediction_mean_derivative = np.dot(dKxU_dx * self.likelihood_.s2, B)
         return prediction_mean_derivative
 
     def _derivative_prediction_variance(self, x):
         Sigma_inv = sla.cho_solve((self.lux_, True), np.eye(self.U_.shape[0]))
-        dKxU_dx = np.sum(self.kernel_.gradx(x, self.U_), axis=-1)
+        dKxU_dx = np.sum(self.kernel_.gradx(x, self.U_), axis=1)
         prediction_mean_derivative = np.dot(dKxU_dx, np.dot(Sigma_inv, dKxU_dx.T))
 
 
