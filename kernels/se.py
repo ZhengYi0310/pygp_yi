@@ -62,12 +62,12 @@ class SE(RealKernel):
         X1, X2 = rescale(np.exp(self.logels_), X1, X2)
         D = 0.5 * sqdist(X1, X2)
         K = np.exp(self.logsf_ * 2 - D)
-        yield 2 * K # Derivative w.r.t to signal variances
+        yield 2 * K # Derivative w.r.t to the log signal variances
         if self.iso_:
-            yield K * D # Derivative w.r.t to length scales (iso)
+            yield K * D # Derivative w.r.t to the log length scales (iso)
         else:
             for D in sqdist_foreach(X1, X2):
-                yield  K * D # Derivative w.r.t to length scales (ard)
+                yield  K * D # Derivative w.r.t to the log of length scales (ard)
 
     def dget(self, X1):
         return np.exp(self.logsf_ * 2) * np.ones(len(X1))
@@ -98,7 +98,7 @@ class SE(RealKernel):
         K = np.exp(self.logsf_ * 2 - np.sum(D ** 2, axis=-1) * 0.5)
 
         D = D / els
-        M = np.eye(D) / (els ** 2) - D[:, :, :, None] * D[:, :, None, :]
+        M = np.eye(d) / (els ** 2) - D[:, :, :, None] * D[:, :, None, :]
         G = K[:, :, None, None] * M
         return G
 

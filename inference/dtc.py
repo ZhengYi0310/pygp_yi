@@ -58,14 +58,14 @@ class DTC(GP):
         su2 = self.likelihood_.s2 * 1e-6
 
         # choleskies of Kuu and (Kuu + Kfu * Kuf / sn2), respectively,
-        Kuu = self.kernel_.get(self.U_)
-        self.luu_ = sla.cholesky(Kuu + su2 * np.eye(p_dim), lower=True)
+        self.Kuu = self.kernel_.get(self.U_)
+        self.luu_ = sla.cholesky(self.Kuu + su2 * np.eye(p_dim), lower=True)
 
-        Kux = self.kernel_.get(self.U_, self.X_)
-        Sigma = Kuu + np.dot(Kux , Kux.T) / self.likelihood_.s2
-        r = self.Y_ - self.mean_
+        self.Kux = self.kernel_.get(self.U_, self.X_)
+        Sigma = self.Kuu + np.dot(self.Kux , self.Kux.T) / self.likelihood_.s2
+        self.r = self.Y_ - self.mean_
         self.lux_ = sla.cholesky(Sigma + su2 * np.eye(p_dim), lower=True)
-        self.alpha_ = sla.solve_triangular(self.lux_, np.dot(Kux, r), lower=True)
+        self.alpha_ = sla.solve_triangular(self.lux_, np.dot(self.Kux, self.r), lower=True)
 
     def _full_posterior(self, X):
         # grab the prior mean and variance.
@@ -112,8 +112,8 @@ class DTC(GP):
 
             Rdk1 = np.rollaxis(np.reshape(Rdk1, (-1,) + X.shape), 2)  # D x M x N
             Rdk2 = np.rollaxis(np.reshape(Rdk2, (-1,) + X.shape), 2)  # D x M x N
-            ds2 -= 2 * np.sum(Rdk1 * a, axis=1).T  # N x D
-            ds2 += 2 * np.sum(Rdk2 * b ,axis=1).T
+            ds2 += 2 * np.sum(Rdk1 * a, axis=1).T  # N x D
+            ds2 -= 2 * np.sum(Rdk2 * b ,axis=1).T
 
         return (mu, s2, dmu, ds2)
     def loglikelihood(self, grad=False):
@@ -147,11 +147,11 @@ class DTC(GP):
 
         # E. Snelson's Phd thesis
         B = sla.cho_solve((self.lux_, True), np.dot(Kux, r))
-        Sigma_inv = sla.cho_solve((self.lux_, True), np.eye(P))
-        Kuu_inv = sla.cho_solve((self.luu_, True), np.eye(P))
+        Sigma_inv = sla.cho_solve((self.lux_, True), np.eye(self.U_.shape[0]))
+        Kuu_inv = sla.cho_solve((self.luu_, True), np.eye(self.U_.shape[0]))
 
         # gradient w.r.t the noise variance
-        dl1dsn2 = (-self.ndata + np.trace(np.dot(V.T, V))) * 0.5
+        dl1dsn2 = (-self.ndata + np.trace(np.dot(V.T, V))) * 0.5 / sn2
         dl2dsn2 = 0.5 *  np.dot(np.dot(r.T, A.T), np.dot(A, r))
         dlZ[0] = dl1dsn2 + dl2dsn2
 

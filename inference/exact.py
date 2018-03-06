@@ -128,7 +128,7 @@ class ExactGP(GP):
         if not grad:
             return lZ
 
-        alpha = sla.solve_triangular(self.L_.T, self.alpha_, lower=True)
+        alpha = sla.solve_triangular(self.L_.T, self.alpha_)
         Q = -np.dot(alpha, alpha.T)
         Q += sla.cho_solve((self.L_, True), np.eye(self.ndata))
 

@@ -150,7 +150,7 @@ class SoR(GP):
 
         V = sla.solve_triangular(self.lux_, Kux, lower=True)
         V /= sn
-        P = self.U_.shape[0]
+        P = self.ndata
         A = np.eye(P) - np.dot(V.T, V)
         lZ = -0.5 * np.dot(np.dot(r.T, A), r)
 
@@ -171,8 +171,8 @@ class SoR(GP):
 
         # E. Snelson's Phd thesis
         B = sla.cho_solve((self.lux_, True), np.dot(Kux, r))
-        Sigma_inv = sla.cho_solve((self.lux_, True), np.eye(P))
-        Kuu_inv = sla.cho_solve((self.luu_, True), np.eye(P))
+        Sigma_inv = sla.cho_solve((self.lux_, True), np.eye(self.U_.shape[0]))
+        Kuu_inv = sla.cho_solve((self.luu_, True), np.eye(self.U_.shape[0]))
 
         # gradient w.r.t the noise variance
         dl1dsn2 = (-self.ndata + np.trace(np.dot(V.T, V))) * 0.5
@@ -186,13 +186,14 @@ class SoR(GP):
             dlZ1 = -0.5 * np.sum(Sigma_inv * Sigma_dot) + 0.5 * np.sum(Kuu_inv * dKuu)
 
             temp1 = sla.solve_triangular(self.lux_, Sigma_dot, lower=True)
-            dlZ2 = np.dot(self.lux_.T, B)
+            dlZ2 = sla.solve_triangular(self.lux_, np.dot(dKux, r), lower=True)
             temp2 = np.dot(temp1, B) * 0.5 - dlZ2
-            dlZ2 = -1 * np.dot(dlZ2.T, temp2)
+            temp3 = np.dot(self.lux_.T, B)
+            dlZ2 = -0.5 * np.dot(temp3.T, temp2)
 
             dlZ[i] = dlZ1 + dlZ2
 
         # gradient w.r.t constant mean
-        dlZ[-1] = np.sum(np.dot(A, r))
+        dlZ[-1] = np.sum(np.dot(A, r)) / sn2
 
         return lZ, dlZ
